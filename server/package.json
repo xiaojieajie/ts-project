@@ -1,0 +1,21 @@
+{
+  "name": "ts-project",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "qiheizhiya <953136447@qq.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "rd /s /q dist & tsc",
+    "dev": "nodemon --watch src -e ts --exec ts-node src/index.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^15.6.1",
+    "tslint": "^6.1.3",
+    "typescript": "^4.3.2"
+  },
+  "dependencies": {
+    "class-transformer": "^0.4.0",
+    "class-validator": "^0.13.1",
+    "reflect-metadata": "^0.1.13"
+  }
+}
