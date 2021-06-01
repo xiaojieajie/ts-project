@@ -1,5 +1,5 @@
-import { Type } from 'class-transformer'
-import { ArrayMinSize, IsArray, IsInt, IsNotEmpty, Max, Min} from 'class-validator'
+import { plainToClass, Type } from 'class-transformer'
+import { ArrayMinSize, IsArray, IsInt, IsNotEmpty, Max, Min, validate, ValidationError} from 'class-validator'
 
 export default class Movie {
     @IsNotEmpty({ message: '电影名称不能为空' })
@@ -42,4 +42,23 @@ export default class Movie {
 
     @Type(() => Boolean)
     public poster?: string
+
+    /**
+     * 验证当前电影对象
+     */
+    public async validateThis(): Promise<string[]> {
+        const errors = await validate(this)
+        const temp = errors.map(e => Object.values(e.constraints!))
+        return temp.flat(20)
+    }
+
+    /**
+     * 类型转换
+     */
+    public static transform(plainObject: object): Movie {
+        if (plainObject instanceof Movie) {
+            return plainObject
+        }
+        return plainToClass(Movie, plainObject)
+    }
 }
