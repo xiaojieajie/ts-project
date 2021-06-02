@@ -1,21 +1,15 @@
 import 'reflect-metadata'
 import MovieService from './services/MovieService'
-import Movie from './entities/Movie'
 
-
-const m: any = {
-    name: '123',
-    types: ['1'],
-    areas: ['1'],
-    timeLong: 2,
-    isHot: true,
-    isClasic: true,
-    isComing: true
+const cond: any = {
+    page: 1,
+    limit: 10,
 }
-MovieService.addMovie(m).then(res => {
-    if (Array.isArray(res)) {
-        console.log(res)
-        return
+
+MovieService.find(cond).then(res => {
+    if (res.errors.length > 0) {
+        console.log(res.errors)
+    } else {
+        res.data.forEach(it => console.log(it.name))
     }
-    console.log(res._id)
 })
