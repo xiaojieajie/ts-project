@@ -28,15 +28,15 @@ export default class Movie extends BaseEntity {
 
     @IsNotEmpty({ message: '是否热映不可以为空' })
     @Type(() => Boolean)
-    public isHot: boolean
+    public isHot: boolean = false
 
     @IsNotEmpty({ message: '是否即将上映不可以为空' })
     @Type(() => Boolean)
-    public isComing: boolean
+    public isComing: boolean = false
 
     @IsNotEmpty({ message: '是否是经典影片不可以为空' })
     @Type(() => Boolean)
-    public isClasic: boolean
+    public isClasic: boolean = false
 
     @Type(() => Boolean)
     public description?: boolean

@@ -1,15 +1,11 @@
 import 'reflect-metadata'
-import MovieService from './services/MovieService'
+import MovieRouter from './routes/MovieRoute'
+import UploadRoute from './routes/UploadRoute'
+import Express from 'express'
 
-const cond: any = {
-    page: 1,
-    limit: 10,
-}
+const app = Express()
 
-MovieService.find(cond).then(res => {
-    if (res.errors.length > 0) {
-        console.log(res.errors)
-    } else {
-        res.data.forEach(it => console.log(it.name))
-    }
-})
+
+app.use('/upload', Express.static('public/upload')).use(Express.json()).use('/api/movie', MovieRouter).use('/api/upload', UploadRoute)
+
+app.listen(3000)
