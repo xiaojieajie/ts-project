@@ -1,10 +1,12 @@
 import React from 'react';
+import Layout from './pages/Layout';
+import { BrowserRouter, Route } from 'react-router-dom'
 
-function App() {
+const App: React.FC = () => {
   return (
-    <div className="App">
-      hello world
-    </div>
+    <BrowserRouter>
+      <Route path="/" component={Layout}></Route>
+    </BrowserRouter>
   );
 }
 

@@ -24,7 +24,7 @@ export default class MovieService {
         return data
     }
     public static async delete(id: string): Promise<IResponseData<boolean> | IResponseError> {
-        const { data } = await axios.put(`/api/movie/${id}`)
+        const { data } = await axios.delete(`/api/movie/${id}`)
         return data
     }
     public static async getMovieById(id: string): Promise<IResponseData<IMovie | null>> {
