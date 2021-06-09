@@ -1,44 +1,86 @@
 import React, { Component } from 'react'
-import { Upload } from 'antd'
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
+import { Upload, message, Modal } from 'antd'
+import { PlusOutlined } from '@ant-design/icons'
 import { UploadChangeParam } from 'antd/lib/upload'
+import { IResponseData, IResponseError } from '../services/CommonTypes'
+import { UploadFile } from 'antd/lib/upload/interface'
 interface IProps {
   value?: string
-  onChange?(): void
+  onChange?(img: string): void
 }
-export default class ImageUpload extends Component<IProps> {
-  state = {
-    loading: false
+interface IState {
+  loading: boolean,
+  fileList: Array<UploadFile>,
+  previewVisible: boolean
+}
+export default class ImageUpload extends Component<IProps, IState> {
+  state: IState = {
+    loading: false,
+    fileList: [],
+    previewVisible: false
   }
-  handleChange = (info: UploadChangeParam) => {
-    console.log('我来触发了');
-    if (info.file.status === 'uploading') {
-      this.setState({ loading: true });
-      return;
+  private handleChange = (info: UploadChangeParam) => {
+    if (info.file.response) {
+      this.props.onChange && this.props.onChange(info.file.response.data)
     }
-    if (info.file.status === 'done') {
-      // Get this url from response in real world.
-    }
+    this.setState({ fileList: info.fileList })
   }
+  private handlePreview = (info: UploadFile) => {
+    this.setState({
+      previewVisible: true
+    })
+  }
+  private async handlerRequest(p: any) {
+    const form = new FormData()
+    form.append(p.filename, p.file)
+    const request = new Request(p.action, {
+      method: 'post',
+      body: form
+    })
+    const result: IResponseData<string> | IResponseError = await fetch(request).then(resp => resp.json())
+    if (result.err) {
+      message.error(result.err)
+      return
+    }
+    this.props.onChange!(result.data!)
+  }
+
   render() {
     const uploadButton = (
       <div>
-        {this.state.loading ? <LoadingOutlined /> : <PlusOutlined />}
+        <PlusOutlined />
         <div style={{ marginTop: 8 }}>Upload</div>
       </div>
     );
     return (
-      <Upload
-        name="imgfile"
-        listType="picture-card"
-        className="avatar-uploader"
-        showUploadList={false}
-        action="/api/upload"
-        // beforeUpload={beforeUpload}
-        onChange={this.props.onChange}
-      >
-        {this.props.value ? <img src={this.props.value} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
-      </Upload>
+      <>
+        <Upload
+          name="imgfile"
+          listType="picture-card"
+          className="avatar-uploader"
+          accept='.jpg,.png,.gif'
+          action="/api/upload"
+          fileList={this.state.fileList}
+          showUploadList={true}
+          // beforeUpload={beforeUpload}
+          onPreview={this.handlePreview}
+          onChange={this.handleChange}
+          // customRequest={this.handlerRequest}
+        >
+          {this.props.value ? null : uploadButton}
+        </Upload>
+        <Modal
+          visible={this.state.previewVisible}
+          footer={null}
+          onCancel={() => {
+            this.setState({
+              previewVisible: false
+            })
+          }}
+        >
+          <img alt="example" style={{ width: '100%' }} src={this.props.value!} />
+        </Modal>
+      </>
     )
   }
 }

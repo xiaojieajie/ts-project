@@ -9,9 +9,10 @@ const publicLayout = {
 }
 const onFinish = (values: any) => {
   console.log(values);
-}
-export default class MovieForm extends Component {
+} 
+class MovieForm extends Component {
   render() {
+    console.log(this.props);
     return (
       <>
         <Form name='MovieForm' {...publicLayout} onFinish={onFinish}>
@@ -27,7 +28,7 @@ export default class MovieForm extends Component {
             label="封面图"
             name='poster'
           >
-            <ImageUpload value='poster' />
+            <ImageUpload />
           </Form.Item>
           <Form.Item label=' ' colon={false}>
             <Button type="primary" htmlType="submit">
@@ -39,3 +40,5 @@ export default class MovieForm extends Component {
     )
   }
 }
+
+export default MovieForm
