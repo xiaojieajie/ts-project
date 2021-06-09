@@ -9,7 +9,7 @@ export interface IMovie {
     timeLong: number
     isHot: boolean
     isComing: boolean
-    isClassic: boolean
+    isClasic: boolean
     description?: string
     poster?: string
 }
@@ -19,7 +19,7 @@ export default class MovieService {
         const { data } = await axios.post('/api/movie', movie)
         return data
     }
-    public static async edit(id: string, movie: IMovie): Promise<IResponseData<boolean> | IResponseError> {
+    public static async edit(id: string, movie: Partial<IMovie>): Promise<IResponseData<boolean> | IResponseError> {
         const { data } = await axios.put(`/api/movie/${id}`, movie)
         return data
     }

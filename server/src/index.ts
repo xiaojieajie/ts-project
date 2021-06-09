@@ -5,7 +5,10 @@ import Express from 'express'
 
 const app = Express()
 
-
-app.use('/upload', Express.static('public/upload')).use(Express.json()).use('/api/movie', MovieRouter).use('/api/upload', UploadRoute)
+app.use('/upload', Express.static('public/upload'))
+   .use(Express.json())
+   .use('/api/movie', MovieRouter)
+   .use('/api/upload', UploadRoute)
 
 app.listen(3000)
+

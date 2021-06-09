@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
-
+import MovieForm from '../../components/MovieForm'
 export default class AddMovie extends Component {
     render() {
         return (
-            <div>
-                添加电影
-            </div>
+            <>
+                <h1>添加电影</h1>
+                <MovieForm />
+            </>
         )
     }
 }

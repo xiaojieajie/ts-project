@@ -1,7 +1,7 @@
 import { Reducer } from 'react'
 import { ISearchCondition } from '../../services/CommonTypes'
 import { IMovie } from '../../services/MovieService'
-import { DeleteAction, MovieActions, SaveMoviesAction, SetConditionAction, SetLoadingAction } from '../actions/MovieAction'
+import { DeleteAction, MovieActions, MovieChangeSwitchAction, SaveMoviesAction, SetConditionAction, SetLoadingAction } from '../actions/MovieAction'
 
 export type IMovieCondition = Required<ISearchCondition>
 
@@ -73,6 +73,25 @@ const deleteMovie: MovieReduce<DeleteAction> = (state, { payload }) => {
     }
 }
 
+const changeSwitch: MovieReduce<MovieChangeSwitchAction> = (state, action) => {
+    // 1. 根据id找到对象
+    const movie = state.data.find(d => d._id === action.payload.id)
+    if (!movie) {
+        return state
+    }
+    // 2. 对象克隆
+    const newMovie = { ...movie }
+    newMovie[action.payload.type] = action.payload.newVal
+    // 3. 将对象重新放入到数组
+    return {
+        ...state,
+        data: state.data.map(movie => {
+            if (movie._id === action.payload.id) return newMovie
+            return movie
+        })
+    }
+}
+
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (state: IMovieState = initialState, action: MovieActions) => {
     switch (action.type) {
@@ -84,6 +103,8 @@ export default (state: IMovieState = initialState, action: MovieActions) => {
             return saveMovie(state, action)
         case "movie_setCondition":
             return setCondition(state, action)
+        case "movie_switch":
+            return changeSwitch(state, action)
         default:
             return state
         }
