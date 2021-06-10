@@ -41,7 +41,7 @@ export default class Movie extends BaseEntity {
     @Type(() => Boolean)
     public description?: boolean
 
-    @Type(() => Boolean)
+    @Type(() => String)
     public poster?: string
 
     public static transform(plainObject: object): Movie {

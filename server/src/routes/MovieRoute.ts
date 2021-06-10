@@ -21,6 +21,7 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
     const result = await MovieService.add(req.body)
+    console.log(req.body)
     if (Array.isArray(result)) {
         ResponseHelper.sendError(result, res)
         return
