@@ -38,8 +38,8 @@ export default class Movie extends BaseEntity {
     @Type(() => Boolean)
     public isClasic: boolean = false
 
-    @Type(() => Boolean)
-    public description?: boolean
+    @Type(() => String)
+    public description?: string
 
     @Type(() => String)
     public poster?: string

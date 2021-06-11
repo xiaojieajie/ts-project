@@ -44,7 +44,15 @@ export default class ImageUpload extends Component<IProps, IState> {
     }
     this.props.onChange!(result.data!)
   }
-
+  componentDidUpdate(prevProps: IProps) {
+    if (this.props.value !== prevProps.value) {
+      this.setState({
+        fileList: [
+          { url: this.props.value, name: this.props.value, uid: this.props.value }
+        ]
+      })
+    }
+  }
   render() {
     const uploadButton = (
       <div>

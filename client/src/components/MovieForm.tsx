@@ -1,5 +1,5 @@
 
-import { Button, Checkbox, CheckboxOptionType, Form, Input, InputNumber, message, Switch } from 'antd'
+import { Button, Checkbox, CheckboxOptionType, Form, FormInstance, Input, InputNumber, message, Switch } from 'antd'
 import React, { Component } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router'
 import { IMovie } from '../services/MovieService'
@@ -24,23 +24,30 @@ const allAreas: Array<CheckboxOptionType | string> = [
 ]
 interface IProps extends RouteComponentProps {
   onFinish(movie: IMovie): Promise<string>
+  movie?: IMovie
 }
 class MovieForm extends Component<IProps> {
+
+  private formRef: React.RefObject<FormInstance<IMovie>> = React.createRef()
   private onFinish = async (values: IMovie) => {
     const err = await this.props.onFinish(values)
     if (err) {
       message.error(err)
       return
     }
-    message.success('新增成功', 1, () => {
+    message.success('处理成功', 1, () => {
       this.props.history.goBack()
     })
-  } 
+  }
+  componentDidUpdate() {
+    this.formRef.current.setFieldsValue({
+      ...this.props.movie
+    })
+  }
   render() {
-    console.log(this.props);
     return (
       <>
-        <Form name='MovieForm' {...publicLayout} onFinish={this.onFinish}>
+        <Form ref={this.formRef} name='MovieForm' {...publicLayout} onFinish={this.onFinish}>
           <Form.Item label="名字" name="name" wrapperCol={{span: 8}}
             rules={[{ required: true, message: '必须填写电影名称' }]}
           >
